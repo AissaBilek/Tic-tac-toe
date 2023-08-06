@@ -1,13 +1,32 @@
-function gameBoard(){
-    this.board=[
-      ['','',''],
-      ['','',''],
-      ['','','']
+
+const gameBoard = (() => {
+    const board = [
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', '']
     ];
-    
-}
-function chooseNow(row,index){
-    const gameBoardobject = new gameBoard(); 
-    const statCell=gameBoard.board[row][index];
-    console.log(statCell);
-}
+  
+    const getBoard = () => board;
+  
+    const chooseNow = (row, col, value) => {
+        const statCell=gameBoard.board[row][col];
+      if (statCell === '') {
+        board[row][col] = value;
+        return true; 
+      }
+      return false; 
+    };
+  
+    const resetBoard = () => {
+      for (let row = 0; row < board.length; row++) {
+        for (let col = 0; col < board[row].length; col++) {
+          board[row][col] = '';
+        }
+      }
+    };
+  
+    return { getBoard, chooseNow, resetBoard };
+  })();
+
+
+
