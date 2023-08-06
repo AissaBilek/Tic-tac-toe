@@ -1,6 +1,11 @@
-.table{
-    background-color: #0a1818;
-    color:aqua;
-    font-family: Arial;
-    
+table {
+  border-collapse: collapse;
+}
+
+td {
+  width: 80px;
+  height: 80px;
+  text-align: center;
+  font-size: 40px;
+  border: 1px solid black;
 }
