@@ -1,4 +1,3 @@
-  // JavaScript code (same as previous example)
 
     // Gameboard module
     const gameBoard = (() => {
@@ -10,12 +9,12 @@
 
       const getBoard = () => board;
 
-      const updateCell = (row, col, value) => {
+      const chooseNow = (row, col, value) => {
         if (board[row][col] === '') {
           board[row][col] = value;
-          return true; // Cell was updated successfully
+          return true; // 
         }
-        return false; // Cell was already occupied
+        return false; 
       };
 
       const resetBoard = () => {
@@ -26,12 +25,12 @@
         }
       };
 
-      return { getBoard, updateCell, resetBoard };
+      return { getBoard, chooseNow, resetBoard };
     })();
 
-    // Player factory
-    const createPlayer = (name, marker) => {
-      return { name, marker };
+    //players
+    const userPlayer = (name, effect) => {
+      return { name, effect };
     };
 
     // Game control module
@@ -39,7 +38,7 @@
       let currentPlayer;
       let gameOver = false;
 
-      const players = [createPlayer('Player 1', 'X'), createPlayer('Player 2', 'O')];
+      const players = [userPlayer('Player 1', 'X'), userPlayer('Player 2', 'O')];
 
       const switchPlayer = () => {
         currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
@@ -52,29 +51,57 @@
       const checkWin = () => {
         const board = gameBoard.getBoard();
 
-        // Check rows, columns, and diagonals for a win
-        // (implement your winning condition logic here)
+         // Check rows for a win
+    for (let row = 0; row < 3; row++) {
+      if (board[row][0] !== '' && board[row][0] === board[row][1] && board[row][1] === board[row][2]) {
+        return true;
+      }
+    }
 
-        return false;
+    //Check columns for a win
+    for (let col = 0; col < 3; col++) {
+      if (board[0][col] !== '' && board[0][col] === board[1][col] && board[1][col] === board[2][col]) {
+        return true;
+      }
+    }
+
+    // Check diagonals for a win
+    if (board[0][0] !== '' && board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
+      return true;
+    }
+    if (board[0][2] !== '' && board[0][2] === board[1][1] && board[1][1] === board[2][0]) {
+      return true;
+    }
+
+    return false;
+  
+        
       };
 
       const checkDraw = () => {
         const board = gameBoard.getBoard();
 
-        // Check if the board is full and there is no winner
-        // (implement your draw condition logic here)
-
-        return false;
+        for (let row = 0; row < 3; row++) {
+          for (let col = 0; col < 3; col++) {
+            if (board[row][col] === '') {
+              return false; 
+            }
+          }
+        }
+    
+        return true; 
       };
+    
+      
 
-      const handleCellClick = (row, col) => {
+      const choosenowUpdate = (row, col) => {
         if (gameOver) return;
 
         const currentPlayer = getCurrentPlayer();
-        const updated = gameBoard.updateCell(row, col, currentPlayer.marker);
+        const updated = gameBoard.chooseNow(row, col, currentPlayer.effect);
 
         if (updated) {
-          document.getElementById('dashboard').rows[row].cells[col].textContent = currentPlayer.marker;
+          document.getElementById('dashboard').rows[row].cells[col].textContent = currentPlayer.effect;
 
           if (checkWin()) {
             document.getElementById('result').textContent = `${currentPlayer.name} wins!`;
@@ -84,10 +111,10 @@
             gameOver = true;
           } else {
             switchPlayer();
-            document.getElementById('turn').textContent = `${currentPlayer.name}'s turn (${currentPlayer.marker})`;
+            document.getElementById('turn').textContent = `${currentPlayer.name}'s turn (${currentPlayer.effect})`;
           }
         } else {
-          console.log('Cell already occupied!');
+         console.log('taken already')
         }
       };
 
@@ -96,20 +123,20 @@
         gameOver = false;
         gameBoard.resetBoard();
         document.getElementById('result').textContent = '';
-        document.getElementById('turn').textContent = `${currentPlayer.name}'s turn (${currentPlayer.marker})`;
+        document.getElementById('turn').textContent = `${currentPlayer.name}'s turn (${currentPlayer.effect})`;
       };
 
-      return { startGame, handleCellClick, getCurrentPlayer, isGameOver };
+      return { startGame, choosenowUpdate, getCurrentPlayer, isGameOver };
     })();
 
-    // Start the game when the page loads
+   
     gameController.startGame();
     const initGameBoard = () => {
       const cells = document.querySelectorAll('#dashboard td');
       cells.forEach((cell, index) => {
         const row = Math.floor(index / 3);
         const col = index % 3;
-        cell.onclick = () => gameController.handleCellClick (row, col);
+        cell.onclick = () => gameController.choosenowUpdate (row, col);
       });
     };
 
